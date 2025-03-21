@@ -1,0 +1,19 @@
+# webcam.py
+
+import cv2
+
+def start_webcam():
+    cap = cv2.VideoCapture(0)
+    if not cap.isOpened():
+        raise Exception("Could not open webcam.")
+    return cap
+
+def get_frame(cap):
+    ret, frame = cap.read()
+    if not ret:
+        raise Exception("Could not read frame from webcam.")
+    return frame
+
+def release_webcam(cap):
+    cap.release()
+    cv2.destroyAllWindows()
