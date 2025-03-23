@@ -1,11 +1,17 @@
-numpy
-opencv-python
-tensorflow
-torch
-torchvision
-scikit-learn
-pyyaml
-pytest
-matplotlib
-Cython
-pycuda
+# Core dependencies
+torch>=2.0.0
+torchvision>=0.15.0
+numpy>=1.22.0
+opencv-python>=4.7.0
+pillow>=9.4.0
+
+# Detection models
+# Uncomment to enable YOLOv5 support
+# ultralytics>=8.0.0  # For YOLOv8
+
+# Performance monitoring
+psutil>=5.9.0
+
+# Development
+pytest>=7.3.1
+black>=23.3.0

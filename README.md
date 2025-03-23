@@ -1,94 +1,128 @@
-# Object Tracking Project
+# Object Detection System
 
-This project implements an AI-powered object tracking system using a webcam. It leverages Python with OpenCV and TensorFlow/PyTorch for object detection and tracking, with optional C++ extensions for performance optimizations using CUDA.
+A high-performance, real-time object detection and tracking system using PyTorch and CUDA.
 
-## Project Structure
+## Features
 
-The project is organized as follows:
+- Real-time object detection using RCNN and YOLO models
+- Object tracking with trajectory visualization
+- Adaptive performance optimization for higher frame rates
+- Low-light enhancement for better detection in dark environments
+- Multiple pre-configured performance profiles
+- CUDA-accelerated operations for faster inference
 
-```
-object-tracking-project
-├── src
-│   ├── main.py                # Entry point for the application
-│   ├── camera
-│   │   ├── __init__.py
-│   │   └── webcam.py          # Webcam capture and processing
-│   ├── models
-│   │   ├── __init__.py
-│   │   ├── detector.py        # Object detection models
-│   │   └── tracker.py         # Object tracking algorithms
-│   ├── utils
-│   │   ├── __init__.py
-│   │   ├── visualization.py   # Visualization tools
-│   │   └── performance.py     # Performance monitoring
-│   └── cpp_extensions         # C++ CUDA optimizations
-│       ├── CMakeLists.txt
-│       ├── setup.py           # For building C++ extensions
-│       ├── include
-│       │   └── cuda_ops.h
-│       └── src
-│           └── cuda_ops.cpp
-├── configs
-│   └── default.yaml           # Configuration parameters
-├── data
-│   ├── models                 # Pre-trained models
-│   └── test_videos            # Sample videos for testing
-├── notebooks
-│   └── model_exploration.ipynb
-├── tests
-│   ├── test_detector.py
-│   ├── test_tracker.py
-│   └── test_webcam.py
-├── requirements.txt
-├── setup.py
-└── README.md
-```
+## Requirements
+
+- Python 3.9+
+- CUDA-capable NVIDIA GPU (RTX series recommended)
+- PyTorch 2.0+
+- CUDA Toolkit 11.7+
+- OpenCV 4.7+
+
+See `requirements.txt` for a complete list of dependencies.
 
 ## Installation
 
-1. Clone the repository:
+1. Clone this repository:
    ```
-   git clone <repository-url>
-   cd object-tracking-project
-   ```
-
-2. Create a Python virtual environment:
-   ```
-   python -m venv venv
-   source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+   git clone https://github.com/yourusername/object-detection.git
+   cd object-detection
    ```
 
-3. Install the required Python packages:
+2. Install the required packages:
    ```
    pip install -r requirements.txt
    ```
 
-4. (Optional) If you want to use C++ extensions for performance optimizations, ensure you have CUDA installed and follow the instructions in the `src/cpp_extensions/README.md` for building the C++ components.
-
-## Usage
-
-1. Start the application:
+3. (Optional) Install development requirements:
    ```
-   python src/main.py
+   pip install -r requirements-dev.txt
    ```
 
-2. The application will initialize the webcam, load the object detection model, and start tracking objects in real-time.
+## Quick Start
 
-## Configuration
+The easiest way to run the application is using one of the provided batch files:
 
-Configuration parameters can be modified in the `configs/default.yaml` file. This includes paths to pre-trained models and settings for the tracking algorithms.
+- **Balanced Performance (Default)**:
+  ```
+  run_detector.bat
+  ```
 
-## Testing
+- **Maximum Speed**:
+  ```
+  run_detector.bat speed
+  ```
 
-Unit tests are provided for the object detection and tracking functionalities. To run the tests, use:
+- **High Quality**:
+  ```
+  run_detector.bat quality
+  ```
+
+- **Compatibility Mode** (for troubleshooting):
+  ```
+  run_detector.bat safe
+  ```
+
+## Advanced Usage
+
+You can customize the detection parameters through command-line arguments:
+
 ```
-pytest tests/
+python -m src.main --model=fasterrcnn --resolution=medium --interval=3 --confidence=0.45 --disable_fp16=false
 ```
 
-## Contributing
+### Command-line Options
 
-Contributions are welcome! Please open an issue or submit a pull request for any improvements or bug fixes.
+- `--model`: Detection model to use (fasterrcnn, fasterrcnn_resnet101, maskrcnn, yolov5, yolov8)
+- `--resolution`: Input size for detection (tiny, small, medium, large)
+- `--interval`: Process every N frames for detection (higher values = more FPS but less frequent updates)
+- `--confidence`: Detection confidence threshold (0.0-1.0)
+- `--disable_fp16`: Disable half-precision operations for better compatibility
 
-## License
+## Keyboard Controls
 
-This project is licensed under the MIT License. See the LICENSE file for details.
+While the application is running, you can use these keyboard commands:
+
+- `q`: Quit the application
+- `d`: Cycle through detection interval settings (process every N frames)
+- `e`: Toggle image enhancement for low-light conditions
+- `t`: Toggle trajectory visualization
+
+## Performance Tuning
+
+For optimal performance:
+
+1. Use a smaller resolution (`--resolution=small` or `--resolution=tiny`)
+2. Increase the detection interval (`--interval=5` or higher)
+3. Lower the confidence threshold for better detection in difficult scenes (`--confidence=0.35`)
+4. If you experience CUDA errors, try disabling FP16 (`--disable_fp16=true`)
+
+## Troubleshooting
+
+If you encounter issues:
+
+1. Run the troubleshooting batch file:
+   ```
+   troubleshoot.bat
+   ```
+
+2. Try the safe mode:
+   ```
+   run_safe.bat
+   ```
+
+3. Make sure your GPU drivers are up to date
+
+4. Check that PyTorch is installed with CUDA support:
+   ```
+   python -c "import torch; print(torch.cuda.is_available())"
+   ```
+
+## Architecture
+
+The system consists of several key components:
+
+- **Detector**: Implements various object detection models (RCNN, YOLO)
+- **Tracker**: Tracks objects between frames for continuous detection
+- **Enhancement**: Adaptive image processing for low-light conditions
+- **CUDA Utilities**: Optimized CUDA operations for faster processing
